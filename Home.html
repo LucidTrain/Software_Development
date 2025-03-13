@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGrow - Sustainable Agriculture Solutions</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --primary-dark: #005005;
+            --secondary: #ffd54f;
+            --text-light: #ffffff;
+            --text-dark: #263238;
+            --background: #f5f5f5;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .active {
+            background-color: var(--primary-dark);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect width="800" height="400" fill="%232e7d32"/><path d="M0,100 Q200,-50 400,100 T800,100 L800,400 L0,400 Z" fill="%2360ad5e"/><circle cx="600" cy="80" r="40" fill="%23ffd54f"/><path d="M0,300 C100,290 250,350 350,300 S600,330 800,250 L800,400 L0,400 Z" fill="%23005005"/></svg>');
+            background-size: cover;
+            background-position: center;
+            padding: 6rem 2rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section {
+            padding: 4rem 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-dark);
+        }
+        
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .solution-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-image {
+            height: 180px;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 3rem;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-content h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .calculator {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .calculator h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .results {
+            background-color: var(--primary-light);
+            color: var(--text-light);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .results h4 {
+            margin-bottom: 1rem;
+        }
+        
+        .results-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .result-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        .result-item h5 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .water-tracker {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .tracker-chart {
+            background-color: var(--background);
+            height: 300px;
+            margin: 2rem 0;
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 230px;
+            padding: 0 1rem;
+        }
+        
+        .chart-bar {
+            width: 40px;
+            background-color: var(--primary-light);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 0.5s;
+        }
+        
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+        }
+        
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .chart-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 230px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0 0.5rem;
+        }
+        
+        .chart-y-label {
+            font-size: 0.7rem;
+            transform: translateY(-50%);
+        }
+        
+        .tracker-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+                display: none;
+            }
+            
+            .nav-links.show {
+                display: flex;
+                margin-top: 1rem;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                position: absolute;
+                right: 2rem;
+                top: 1.15rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">🌱</span>
+            <span>EcoGrow</span>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle">☰</button>
+        <div class="nav-links" id="navLinks">
+            <a class="nav-link active" data-section="irrigation-solution">Smart Irrigation</a>
+            <a class="nav-link" data-section="soil-solution">Soil Health</a>
+            <a class="nav-link" data-section="crop-solution">Crop Rotation</a>
+            <a class="nav-link" data-section="energy-solution">Renewable Energy</a>
+            <a class="nav-link" data-section="waste-solution">Waste Management</a>
+        </div>
+    </nav>
+    
+    <header class="hero">
+        <h1>Sustainable Agriculture Solutions</h1>
+        <p>Empowering farmers and environmentalists with innovative tools to maximize efficiency while minimizing environmental impact.</p>
+        <a href="#solutions" class="btn">Explore Solutions</a>
+    </header>
+    
+    <section class="section" id="solutions">
+        <h2 class="section-title">Our Sustainability Solutions</h2>
+        
+        <div class="content-section visible" id="irrigation-solution">
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-image">💧</div>
+                    <div class="card-content">
+                        <h3>Smart Irrigation System</h3>
+                        <p>Reduce water usage by up to 60% with our AI-powered irrigation system that adapts to weather conditions and plant needs.</p>
+                        <div class="action-buttons">
+                            <button class="btn" onclick="showWaterCalculator()">Water Calculator</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">📊</div>
+                    <div class="card-content">
+                        <h3>Water Usage Tracker</h3>
+                        <p>Monitor your water consumption in real-time and receive actionable insights to optimize irrigation practices.</p>
+                        <div class="action-buttons">
+                            <button class="btn" onclick="showWaterTracker()">Track Usage</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">🌧️</div>
+                    <div class="card-content">
+                        <h3>Rainwater Harvesting</h3>
+                        <p>Design and implement efficient rainwater collection systems to supplement your irrigation needs.</p>
+                        <div class="action-buttons">
+                            <button class="btn" onclick="showRainwaterCalculator()">Calculate Potential</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="waterCalculator" style="display: none; margin-top: 3rem;">
+                <div class="calculator">
+                    <h3>Smart Irrigation Water Calculator</h3>
+                    <div class="input-group">
+                        <label for="cropType">Crop Type</label>
+                        <select id="cropType">
+                            <option value="corn">Corn</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="soybeans">Soybeans</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="fieldSize">Field Size (acres)</label>
+                        <input type="number" id="fieldSize" min="0.1" step="0.1" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="soilType">Soil Type</label>
+                        <select id="soilType">
+                            <option value="sandy">Sandy</option>
+                            <option value="loam">Loam</option>
+                            <option value="clay">Clay</option>
+                            <option value="silt">Silt</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="region">Climate Region</label>
+                        <select id="region">
+                            <option value="arid">Arid</option>
+                            <option value="semi-arid">Semi-Arid</option>
+                            <option value="temperate">Temperate</option>
+                            <option value="tropical">Tropical</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="calculateWaterNeeds()">Calculate</button>
+                    
+                    <div id="waterResults" class="results">
+                        <h4>Water Usage Results</h4>
+                        <div class="results-data">
+                            <div class="result-item">
+                                <h5>Traditional Irrigation</h5>
+                                <p id="traditionalUsage">0 gallons/week</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Smart System</h5>
+                                <p id="smartUsage">0 gallons/week</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Water Savings</h5>
+                                <p id="waterSavings">0 gallons/week</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Annual Cost Savings</h5>
+                                <p id="costSavings">$0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="waterTracker" style="display: none; margin-top: 3rem;">
+                <div class="water-tracker">
+                    <h3>Water Usage Tracker</h3>
+                    <p>Monitor your weekly water usage and see how it compares to optimal levels.</p>
+                    
+                    <div class="tracker-chart">
+                        <div class="chart-y-axis">
+                            <span class="chart-y-label">100%</span>
+                            <span class="chart-y-label">75%</span>
+                            <span class="chart-y-label">50%</span>
+                            <span class="chart-y-label">25%</span>
+                            <span class="chart-y-label">0%</span>
+                        </div>
+                        <div class="chart-bars" id="waterChartBars">
+                            <!-- Bars will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="tracker-controls">
+                        <div class="input-group">
+                            <label for="trackingDay">Day</label>
+                            <select id="trackingDay">
+                                <option value="monday">Monday</option>
+                                <option value="tuesday">Tuesday</option>
+                                <option value="wednesday">Wednesday</option>
+                                <option value="thursday">Thursday</option>
+                                <option value="friday">Friday</option>
+                                <option value="saturday">Saturday</option>
+                                <option value="sunday">Sunday</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="waterUsed">Water Used (gallons)</label>
+                            <input type="number" id="waterUsed" min="0" step="1" value="0">
+                        </div>
+                        <button class="btn" onclick="updateWaterUsage()">Update</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="rainwaterCalculator" style="display: none; margin-top: 3rem;">
+                <div class="calculator">
+                    <h3>Rainwater Harvesting Potential</h3>
+                    <div class="input-group">
+                        <label for="roofArea">Roof/Collection Area (sq ft)</label>
+                        <input type="number" id="roofArea" min="1" step="1" value="1000">
+                    </div>
+                    <div class="input-group">
+                        <label for="annualRainfall">Average Annual Rainfall (inches)</label>
+                        <input type="number" id="annualRainfall" min="1" step="0.1" value="30">
+                    </div>
+                    <div class="input-group">
+                        <label for="runoffCoefficient">Runoff Coefficient</label>
+                        <select id="runoffCoefficient">
+                            <option value="0.95">Metal Roof (0.95)</option>
+                            <option value="0.9">Tile Roof (0.9)</option>
+                            <option value="0.8">Asphalt Shingle (0.8)</option>
+                            <option value="0.7">Flat Roof with Gravel (0.7)</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="calculateRainwaterPotential()">Calculate</button>
+                    
+                    <div id="rainwaterResults" class="results">
+                        <h4>Rainwater Harvesting Potential</h4>
+                        <div class="results-data">
+                            <div class="result-item">
+                                <h5>Annual Collection Potential</h5>
+                                <p id="annualPotential">0 gallons</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Monthly Average</h5>
+                                <p id="monthlyAverage">0 gallons</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Irrigation Capacity</h5>
+                                <p id="irrigationCapacity">0 acres</p>
+                            </div>
+                            <div class="result-item">
+                                <h5>Potential Water Cost Savings</h5>
+                                <p id="waterCostSavings">$0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="soil-solution">
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-image">🌱</div>
+                    <div class="card-content">
+                        <h3>Soil Health Monitor</h3>
+                        <p>Track soil nutrients, pH levels, and microbial activity to optimize growing conditions and reduce fertilizer use.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Soil Analysis</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">🌿</div>
+                    <div class="card-content">
+                        <h3>Cover Crop Planner</h3>
+                        <p>Design custom cover crop strategies to enhance soil health, prevent erosion, and fix nitrogen naturally.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Plan Crops</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">🍂</div>
+                    <div class="card-content">
+                        <h3>Composting System</h3>
+                        <p>Transform agricultural waste into nutrient-rich compost with our guided composting system.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Compost Calculator</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="crop-solution">
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-image">🌽</div>
+                    <div class="card-content">
+                        <h3>Crop Rotation Planner</h3>
+                        <p>Optimize your field productivity and break pest cycles with scientifically designed crop rotations.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Plan Rotation</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">🐞</div>
+                    <div class="card-content">
+                        <h3>Integrated Pest Management</h3>
+                        <p>Reduce pesticide use with our IPM system that combines biological controls and targeted interventions.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Pest Monitor</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">📊</div>
+                    <div class="card-content">
+                        <h3>Yield Predictor</h3>
+                        <p>AI-powered yield predictions help you optimize planting density and resource allocation.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Predict Yield</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="energy-solution">
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-image">☀️</div>
+                    <div class="card-content">
+                        <h3>Solar Integration</h3>
+                        <p>Design and implementation of solar power systems optimized for agricultural operations.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Solar Calculator</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">💨</div>
+                    <div class="card-content">
+                        <h3>Wind Energy</h3>
+                        <p>Harness wind power to reduce energy costs and carbon footprint of your farming operation.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Wind Assessment</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">♻️</div>
+                    <div class="card-content">
+                        <h3>Biogas Production</h3>
+                        <p>Convert agricultural waste into biogas for energy production and reduce methane emissions.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Biogas Potential</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="waste-solution">
+            <div class="solutions-grid">
+                <div class="solution-card">
+                    <div class="card-image">🔄</div>
+                    <div class="card-content">
+                        <h3>Zero Waste System</h3>
+                        <p>Comprehensive waste management solutions that turn agricultural byproducts into valuable resources.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Waste Audit</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">🍎</div>
+                    <div class="card-content">
+                        <h3>Food Waste Reduction</h3>
+                        <p>Minimize harvest and post-harvest losses with optimized handling and storage solutions.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Loss Calculator</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="solution-card">
+                    <div class="card-image">📦</div>
+                    <div class="card-content">
+                        <h3>Sustainable Packaging</h3>
+                        <p>Eco-friendly packaging solutions that reduce plastic use and enhance product marketability.</p>
+                        <div class="action-buttons">
+                            <button class="btn">Packaging Options</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2025 EcoGrow Sustainable Agriculture Solutions</p>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('show');
+        });
+        
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show relevant section
+                const sectionId = this.getAttribute('data-section');
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('visible');
+                });
+                document.getElementById(sectionId).classList.add('visible');
+                
+                // Hide all calculators
+                document.getElementById('waterCalculator').style.display = 'none';
+                document.getElementById('waterTracker').style.display = 'none';
+                document.getElementById('rainwaterCalculator').style.display = 'none';
+                
+                // Hide mobile menu after click
+                document.getElementById('navLinks').classList.remove('show');
+            });
+        });
+        
+        // Smart Irrigation Calculator
+        function showWaterCalculator() {
+            document.getElementById('waterCalculator').style.display = 'block';
+            document.getElementById('waterTracker').style.display = 'none';
+            document.getElementById('rainwaterCalculator').style.display = 'none';
+            window.scrollBy(0, 500);
+        }
+        
+        function calculateWaterNeeds() {
+            const cropType = document.getElementById('cropType').value;
+            const fieldSize = parseFloat(document.getElementById('fieldSize').value);
+            const soilType = document.getElementById('soilType').value;
+            const region = document.getElementById('region').value;
+            
+            // Base water needs in gallons per acre per week
+            let baseWaterNeeds = {
+                'corn': 27000,
+                'wheat': 18000,
+                'soybeans': 22000,
+                'vegetables': 30000,
+                'fruits': 25000
+            };
+            
+            // Soil adjustment factors
+            let soilFactor = {
+                'sandy': 1.3,
+                'loam': 1.0,
+                'clay': 0.8,
+                'silt': 0.9
+            };
+            
+            // Climate region factors
+            let regionFactor = {
+                'arid': 1.5,
+                'semi-arid': 1.3,
+                'temperate': 1.0,
+                'tropical': 0.8
+            };
+            
+            // Calculate traditional usage
+            let traditionalUsage = baseWaterNeeds[cropType] * fieldSize * soilFactor[soilType] * regionFactor[region];
+            
+            // Smart system is more efficient (about 40-60% savings)
+            let smartUsage = traditionalUsage * 0.45;
+            let savings = traditionalUsage - smartUsage;
+            
+            // Water cost (approximate) per 1000 gallons
+            const waterCostPer1000Gallons = 3.5;
+            let annualCostSavings = (savings * 52 / 1000) * waterCostPer1000Gallons;
+            
+            // Display results
+            document.getElementById('traditionalUsage').textContent = Math.round(traditionalUsage).toLocaleString() + ' gallons/week';
+            document.getElementById('smartUsage').textContent = Math.round(smartUsage).toLocaleString() + ' gallons/week';
+            document.getElementById('waterSavings').textContent = Math.round(savings).toLocaleString() + ' gallons/week';
+            document.getElementById('costSavings').textContent = '$' + Math.round(annualCostSavings).toLocaleString();
+            
+            document.getElementById('waterResults').style.display = 'block';
+        }
+        
+        // Water Usage Tracker
+        function showWaterTracker() {
+            document.getElementById('waterTracker').style.display = 'block';
+            document.getElementById('waterCalculator').style.display = 'none';
+            document.getElementById('rainwaterCalculator').style.display = 'none';
+            window.scrollBy(0, 500);
+            
+            // Initialize water tracker if not already done
+            if (!window.waterData) {
+                initializeWaterTracker();
+            }
+        }
+        
+        function initializeWaterTracker() {
+            window.waterData = {
+                monday: { used: 0, optimal: 100 },
+                tuesday: { used: 0, optimal: 120 },
+                wednesday: { used: 0, optimal: 140 },
+                thursday: { used: 0, optimal: 120 },
+                friday: { used: 0, optimal: 100 },
+                saturday: { used: 0, optimal: 80 },
+                sunday: { used: 0, optimal: 60 }
+            };
+            
+            // Create initial chart
+            renderWaterChart();
+        }
+        
+        function renderWaterChart() {
+            const barsContainer = document.getElementById('waterChartBars');
+            barsContainer.innerHTML = '';
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            days.forEach((day, index) => {
+                const data = window.waterData[day];
+                const percentage = data.optimal > 0 ? (data.used / data.optimal) * 100 : 0;
+                
+                // Create bar element
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = Math.min(percentage, 100) + '%';
+                
+                // Add color based on usage
+                if (percentage < 75) {
+                    bar.style.backgroundColor = '#60ad5e'; // Good - green
+                } else if (percentage < 100) {
+                    bar.style.backgroundColor = '#ffd54f'; // Warning - yellow
+                } else {
+                    bar.style.backgroundColor = '#e53935'; // Over usage - red
+                }
+                
+                // Add day label
+                const label = document.createElement('span');
+                label.className = 'chart-bar-label';
+                label.textContent = shortDays[index];
+                bar.appendChild(label);
+                
+                // Add value label
+                const value = document.createElement('span');
+                value.className = 'chart-bar-value';
+                value.textContent = Math.round(data.used) + 'g';
+                bar.appendChild(value);
+                
+                barsContainer.appendChild(bar);
+            });
+        }
+        
+        function updateWaterUsage() {
+            const day = document.getElementById('trackingDay').value;
+            const waterUsed = parseInt(document.getElementById('waterUsed').value) || 0;
+            
+            // Update data
+            window.waterData[day].used = waterUsed;
+            
+            // Re-render chart
+            renderWaterChart();
+        }
+        
+        // Rainwater Calculator
+        function showRainwaterCalculator() {
+            document.getElementById('rainwaterCalculator').style.display = 'block';
+            document.getElementById('waterCalculator').style.display = 'none';
+            document.getElementById('waterTracker').style.display = 'none';
+            window.scrollBy(0, 500);
+        }
+        
+        function calculateRainwaterPotential() {
+            const roofArea = parseFloat(document.getElementById('roofArea').value);
+            const annualRainfall = parseFloat(document.getElementById('annualRainfall').value);
+            const runoffCoefficient = parseFloat(document.getElementById('runoffCoefficient').value);
+            
+            // Calculate potential rainwater collection in gallons
+            // Formula: Area (sq ft) × Rainfall (inches) × 0.623 × Runoff Coefficient
+            const annualPotential = roofArea * annualRainfall * 0.623 * runoffCoefficient;
+            const monthlyAverage = annualPotential / 12;
+            
+            // Estimate irrigation capacity (roughly 27,000 gallons per acre per month for most crops)
+            const irrigationCapacity = monthlyAverage / 27000;
+            
+            // Water cost savings (approximate)
+            const waterCostPer1000Gallons = 3.5;
+            const costSavings = (annualPotential / 1000) * waterCostPer1000Gallons;
+            
+            // Display results
+            document.getElementById('annualPotential').textContent = Math.round(annualPotential).toLocaleString() + ' gallons';
+            document.getElementById('monthlyAverage').textContent = Math.round(monthlyAverage).toLocaleString() + ' gallons';
+            document.getElementById('irrigationCapacity').textContent = irrigationCapacity.toFixed(2) + ' acres';
+            document.getElementById('waterCostSavings').textContent = '$' + Math.round(costSavings).toLocaleString();
+            
+            document.getElementById('rainwaterResults').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
