@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Tracker</title>
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --secondary: #81C784;
+            --text: #212121;
+            --text-light: #757575;
+            --background: #F5F5F5;
+            --card: #FFFFFF;
+            --error: #D32F2F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background-color: var(--card);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        
+        input, select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .result {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        .recommendations {
+            list-style-type: none;
+        }
+        
+        .recommendations li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .recommendations li:before {
+            content: "🌱";
+            position: absolute;
+            left: 0;
+        }
+        
+        .footprint-meter {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .footprint-value {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #FFC107, #F44336);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .category-breakdown {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        @media (min-width: 576px) {
+            .category-breakdown {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+        
+        .category-name {
+            font-weight: 600;
+        }
+        
+        .history-container {
+            margin-top: 1rem;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard > * {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .dashboard > *:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .dashboard > *:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .dashboard > *:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Carbon Footprint Tracker</h1>
+        <p>Track, understand, and reduce your environmental impact</p>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard">
+            <div class="card">
+                <h2>Calculate Your Footprint</h2>
+                <form id="footprint-form">
+                    <div class="form-group">
+                        <label for="transportation">Daily Transportation</label>
+                        <select id="transportation" name="transportation">
+                            <option value="0">Walk/Bicycle (0 kg CO₂)</option>
+                            <option value="2.6">Public Transit (2.6 kg CO₂)</option>
+                            <option value="5.2">Small Car (5.2 kg CO₂)</option>
+                            <option value="9.1">Medium Car (9.1 kg CO₂)</option>
+                            <option value="14.3">Large Car/SUV (14.3 kg CO₂)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mileage">Daily Travel Distance (miles)</label>
+                        <input type="number" id="mileage" name="mileage" min="0" value="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="electricity">Daily Electricity Usage (kWh)</label>
+                        <input type="number" id="electricity" name="electricity" min="0" value="15">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="diet">Diet Type</label>
+                        <select id="diet" name="diet">
+                            <option value="7.9">Meat Heavy (7.9 kg CO₂)</option>
+                            <option value="5.1">Average (5.1 kg CO₂)</option>
+                            <option value="3.9">Pescatarian (3.9 kg CO₂)</option>
+                            <option value="2.5">Vegetarian (2.5 kg CO₂)</option>
+                            <option value="1.6">Vegan (1.6 kg CO₂)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="waste">Waste Generated (lbs/day)</label>
+                        <input type="number" id="waste" name="waste" min="0" value="4.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="flights">Flights per Year</label>
+                        <input type="number" id="flights" name="flights" min="0" value="2">
+                    </div>
+                    
+                    <button type="submit">Calculate My Footprint</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2>Your Carbon Footprint</h2>
+                <div id="result-container">
+                    <div class="result">Enter your data to see your carbon footprint</div>
+                    
+                    <div id="footprint-result" style="display: none;">
+                        <h3>Your Daily Carbon Footprint:</h3>
+                        <div class="footprint-meter">
+                            <div class="footprint-value" style="width: 0%;"></div>
+                        </div>
+                        <p><span id="footprint-daily">0</span> kg CO₂ per day</p>
+                        <p><span id="footprint-yearly">0</span> metric tons CO₂ per year</p>
+                        <p>This is <span id="comparison"></span> the average American (16.1 metric tons per year)</p>
+                        
+                        <h3 class="mt-4">Breakdown by Category</h3>
+                        <div class="category-breakdown" id="category-breakdown">
+                            <!-- Categories will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Reduction Recommendations</h2>
+                <ul class="recommendations" id="recommendations">
+                    <li>Complete the calculator to get personalized recommendations</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Track Your Progress</h2>
+                <div class="chart-container">
+                    <canvas id="history-chart"></canvas>
+                </div>
+                <p id="no-data" style="text-align: center; margin-top: 2rem;">Complete your first calculation to start tracking</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        // Constants for carbon footprint calculations
+        const ELECTRICITY_FACTOR = 0.42; // kg CO2 per kWh
+        const WASTE_FACTOR = 0.5; // kg CO2 per lb of waste
+        const FLIGHT_FACTOR = 1100; // kg CO2 per flight (averaged)
+
+        // Store history data
+        let historyData = JSON.parse(localStorage.getItem('footprintHistory')) || [];
+        let chart = null;
+
+        // DOM Elements
+        const form = document.getElementById('footprint-form');
+        const resultContainer = document.getElementById('result-container');
+        const footprintResult = document.getElementById('footprint-result');
+        const footprintDaily = document.getElementById('footprint-daily');
+        const footprintYearly = document.getElementById('footprint-yearly');
+        const comparison = document.getElementById('comparison');
+        const recommendations = document.getElementById('recommendations');
+        const categoryBreakdown = document.getElementById('category-breakdown');
+        const footprintValue = document.querySelector('.footprint-value');
+        const noDataMessage = document.getElementById('no-data');
+
+        // Initialize chart
+        function initChart() {
+            if (historyData.length === 0) return;
+            
+            noDataMessage.style.display = 'none';
+            
+            const ctx = document.getElementById('history-chart').getContext('2d');
+            
+            // Extract dates and values from history
+            const dates = historyData.map(entry => new Date(entry.date).toLocaleDateString());
+            const values = historyData.map(entry => entry.total);
+            
+            // Create or update chart
+            if (chart) {
+                chart.data.labels = dates;
+                chart.data.datasets[0].data = values;
+                chart.update();
+            } else {
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Daily Carbon Footprint (kg CO₂)',
+                            data: values,
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'kg CO₂'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Calculate carbon footprint
+        function calculateFootprint(formData) {
+            // Get form values
+            const transportationType = parseFloat(formData.get('transportation'));
+            const mileage = parseFloat(formData.get('mileage'));
+            const electricity = parseFloat(formData.get('electricity'));
+            const diet = parseFloat(formData.get('diet'));
+            const waste = parseFloat(formData.get('waste'));
+            const flights = parseFloat(formData.get('flights'));
+            
+            // Calculate category footprints
+            const transportation = transportationType * mileage;
+            const electricityFootprint = electricity * ELECTRICITY_FACTOR;
+            const wasteFootprint = waste * WASTE_FACTOR;
+            const flightsDaily = (flights * FLIGHT_FACTOR) / 365;
+            
+            // Calculate total
+            const totalDaily = transportation + electricityFootprint + diet + wasteFootprint + flightsDaily;
+            const totalYearly = totalDaily * 365 / 1000; // Convert to metric tons
+            
+            // Create result object with category breakdown
+            return {
+                categories: {
+                    transportation: transportation,
+                    electricity: electricityFootprint,
+                    diet: diet,
+                    waste: wasteFootprint,
+                    flights: flightsDaily
+                },
+                daily: totalDaily.toFixed(2),
+                yearly: totalYearly.toFixed(2),
+                date: new Date().toISOString()
+            };
+        }
+
+        // Generate recommendations based on footprint
+        function generateRecommendations(result) {
+            const categories = result.categories;
+            const recs = [];
+            
+            // Transportation recommendations
+            if (categories.transportation > 10) {
+                recs.push("Consider carpooling, using public transportation, or switching to a more fuel-efficient vehicle");
+                recs.push("Try to combine errands to reduce total mileage");
+            }
+            if (categories.transportation > 5) {
+                recs.push("For short trips, walk or cycle instead of driving");
+            }
+            
+            // Electricity recommendations
+            if (categories.electricity > 6) {
+                recs.push("Switch to LED bulbs and energy-efficient appliances");
+                recs.push("Unplug devices when not in use to reduce phantom power");
+            }
+            if (categories.electricity > 3) {
+                recs.push("Consider installing smart thermostats to optimize energy usage");
+                recs.push("Look into renewable energy options for your home");
+            }
+            
+            // Diet recommendations
+            if (parseFloat(form.diet.value) > 3.9) {
+                recs.push("Try incorporating 1-2 meat-free days per week");
+                recs.push("Choose locally sourced foods to reduce transportation emissions");
+            }
+            
+            // Waste recommendations
+            if (categories.waste > 2) {
+                recs.push("Start composting food scraps to reduce landfill waste");
+                recs.push("Focus on reducing single-use plastics in your daily routine");
+            }
+            
+            // Flight recommendations
+            if (categories.flights > 3) {
+                recs.push("Consider taking fewer flights or combining trips when possible");
+                recs.push("Offset your flight emissions through reputable carbon offset programs");
+            }
+            
+            // General recommendations
+            recs.push("Track your progress monthly to stay motivated");
+            
+            return recs;
+        }
+
+        // Display results
+        function displayResults(result) {
+            // Show the result section
+            footprintResult.style.display = 'block';
+            
+            // Update the values
+            footprintDaily.textContent = result.daily;
+            footprintYearly.textContent = result.yearly;
+            
+            // Set meter value (max at 30kg daily)
+            const percentage = Math.min((result.daily / 30) * 100, 100);
+            footprintValue.style.width = percentage + '%';
+            
+            // Compare to average
+            const comparisonValue = (result.yearly / 16.1 * 100).toFixed(0);
+            comparison.textContent = comparisonValue < 100 ? 
+                `${100 - comparisonValue}% below` : 
+                `${comparisonValue - 100}% above`;
+            
+            // Display category breakdown
+            categoryBreakdown.innerHTML = '';
+            const categories = result.categories;
+            const total = parseFloat(result.daily);
+            
+            for (const [category, value] of Object.entries(categories)) {
+                const percentage = ((value / total) * 100).toFixed(1);
+                const formattedName = category.charAt(0).toUpperCase() + category.slice(1);
+                
+                categoryBreakdown.innerHTML += `
+                    <div class="category-item">
+                        <span class="category-name">${formattedName}</span>
+                        <span>${value.toFixed(1)} kg (${percentage}%)</span>
+                    </div>
+                `;
+            }
+            
+            // Generate and display recommendations
+            const recs = generateRecommendations(result);
+            recommendations.innerHTML = '';
+            recs.forEach(rec => {
+                recommendations.innerHTML += `<li>${rec}</li>`;
+            });
+            
+            // Save to history and update chart
+            if (!historyData.find(entry => 
+                new Date(entry.date).toDateString() === new Date().toDateString())) {
+                historyData.push({
+                    date: result.date,
+                    total: parseFloat(result.daily)
+                });
+                
+                // Keep only last 30 entries
+                if (historyData.length > 30) {
+                    historyData.shift();
+                }
+                
+                localStorage.setItem('footprintHistory', JSON.stringify(historyData));
+                initChart();
+            }
+        }
+
+        // Form submission handler
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const result = calculateFootprint(formData);
+            displayResults(result);
+        });
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+        });
+    </script>
+</body>
+</html>
