@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agricultural Resource Management</title>
+  <style>
+    :root {
+      --primary: #2c8c54;
+      --primary-light: #4caf7d;
+      --primary-dark: #1b5e38;
+      --secondary: #3498db;
+      --secondary-light: #5dade2;
+      --secondary-dark: #2874a6;
+      --accent: #f39c12;
+      --light: #f5f5f5;
+      --dark: #333;
+      --danger: #e74c3c;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f0f4f8;
+      color: var(--dark);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 20px;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+    
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+    
+    .card-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .app-section {
+      padding: 40px 0;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+    
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--secondary-dark);
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(44, 140, 84, 0.2);
+    }
+    
+    .chart-container {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    
+    th {
+      background-color: var(--primary-light);
+      color: white;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    .status-optimal {
+      background-color: #2ecc71;
+    }
+    
+    .status-warning {
+      background-color: #f39c12;
+    }
+    
+    .status-critical {
+      background-color: #e74c3c;
+    }
+    
+    .sidebar {
+      grid-column: span 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .main-content {
+      grid-column: span 3;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .filter-btn {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary-light);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .weather-card {
+      background-color: #f5f9ff;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .alert-card {
+      background-color: #fff5f5;
+      border-left: 4px solid var(--danger);
+    }
+    
+    .resource-card {
+      background-color: #f5fff7;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .stat {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .stat-label {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    .trend-up {
+      color: #2ecc71;
+    }
+    
+    .trend-down {
+      color: #e74c3c;
+    }
+    
+    .recommendations {
+      margin-top: 20px;
+    }
+    
+    .recommendation-item {
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    
+    .recommendation-item h4 {
+      margin-bottom: 5px;
+      color: var(--primary-dark);
+    }
+    
+    .recommendation-item p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: 2;
+      }
+      
+      .main-content {
+        order: 1;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <i class="fas fa-leaf"></i>
+          <span>AgriResource Pro</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#dashboard" class="active">Dashboard</a></li>
+          <li><a href="#water">Water Usage</a></li>
+          <li><a href="#fertilizer">Fertilizer</a></li>
+          <li><a href="#allocation">Resource Allocation</a></li>
+          <li><a href="#settings">Settings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="dashboard" class="app-section">
+      <h2 class="section-title">Resource Dashboard</h2>
+      <div class="dashboard">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Water Usage Summary</h3>
+            <div class="card-icon">
+              <i class="fas fa-tint"></i>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="stat">
+              <div class="stat-value">18,432</div>
+              <div class="stat-label">Gallons Used <br> <span class="trend-down"><i class="fas fa-arrow-down"></i> 3.2%</span></div>
+            </div>
+            <div class="chart-container" id="waterChart"></div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Fertilizer Application</h3>
+            <div class="card-icon">
+              <i class="fas fa-flask"></i>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="stat">
+              <div class="stat-value">842</div>
+              <div class="stat-label">Pounds Applied <br> <span class="trend-up"><i class="fas fa-arrow-up"></i> 5.7%</span></div>
+            </div>
+            <div class="chart-container" id="fertilizerChart"></div>
+          </div>
+        </div>
+        
+        <div class="card alert-card">
+          <div class="card-header">
+            <h3 class="card-title">Critical Alerts</h3>
+            <div class="card-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li>Sector B3 water pressure low</li>
+              <li>Fertilizer supply running low (14%)</li>
+              <li>Weather alert: Heavy rain forecast</li>
+            </ul>
+            <button class="btn btn-secondary" style="margin-top: 10px;">View All Alerts</button>
+          </div>
+        </div>
+        
+        <div class="card weather-card">
+          <div class="card-header">
+            <h3 class="card-title">Weather Forecast</h3>
+            <div class="card-icon">
+              <i class="fas fa-cloud-sun"></i>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between;">
+              <div style="text-align: center;">
+                <div><i class="fas fa-cloud-rain" style="font-size: 2rem; color: #3498db;"></i></div>
+                <div>Today</div>
+                <div>78°F</div>
+              </div>
+              <div style="text-align: center;">
+                <div><i class="fas fa-cloud-sun" style="font-size: 2rem; color: #f39c12;"></i></div>
+                <div>Tomorrow</div>
+                <div>82°F</div>
+              </div>
+              <div style="text-align: center;">
+                <div><i class="fas fa-sun" style="font-size: 2rem; color: #f39c12;"></i></div>
+                <div>Wednesday</div>
+                <div>85°F</div>
+              </div>
+              <div style="text-align: center;">
+                <div><i class="fas fa-sun" style="font-size: 2rem; color: #f39c12;"></i></div>
+                <div>Thursday</div>
+                <div>84°F</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="water" class="app-section">
+      <h2 class="section-title">Water Usage Tracking</h2>
+      <div class="grid-container">
+        <div class="sidebar">
+          <h3>Filters</h3>
+          <div class="filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Field A</button>
+            <button class="filter-btn">Field B</button>
+            <button class="filter-btn">Field C</button>
+          </div>
+          
+          <h3>Date Range</h3>
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" value="2025-03-01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" value="2025-03-14">
+          </div>
+          
+          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">Apply Filters</button>
+          
+          <div class="recommendations">
+            <h3>Recommendations</h3>
+            <div class="recommendation-item">
+<h4>Reduce Watering in Field B</h4>
+              <p>Soil moisture levels are adequate for the next 48 hours. Consider reducing water allocation by 15% to optimize resource usage.</p>
+            </div>
+            <div class="recommendation-item">
+              <h4>Optimize Irrigation Schedule</h4>
+              <p>Based on weather forecast, rescheduling irrigation to early morning hours can reduce evaporation by up to 30%.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="main-content">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Water Usage Trends</h3>
+              <button class="btn btn-secondary">Export Data</button>
+            </div>
+            <div class="chart-container" id="waterUsageTrend"></div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Water Allocation by Field</h3>
+            </div>
+            <div class="chart-container" id="waterAllocationChart"></div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Recent Water Usage Data</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Field</th>
+                  <th>Amount (Gallons)</th>
+                  <th>Method</th>
+                  <th>Efficiency Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mar 14, 2025</td>
+                  <td>Field A</td>
+                  <td>1,245</td>
+                  <td>Drip Irrigation</td>
+                  <td><span class="status-indicator status-optimal"></span> Optimal</td>
+                </tr>
+                <tr>
+                  <td>Mar 13, 2025</td>
+                  <td>Field B</td>
+                  <td>2,890</td>
+                  <td>Sprinkler</td>
+                  <td><span class="status-indicator status-warning"></span> Moderate</td>
+                </tr>
+                <tr>
+                  <td>Mar 13, 2025</td>
+                  <td>Field C</td>
+                  <td>1,760</td>
+                  <td>Drip Irrigation</td>
+                  <td><span class="status-indicator status-optimal"></span> Optimal</td>
+                </tr>
+                <tr>
+                  <td>Mar 12, 2025</td>
+                  <td>Field A</td>
+                  <td>1,245</td>
+                  <td>Drip Irrigation</td>
+                  <td><span class="status-indicator status-optimal"></span> Optimal</td>
+                </tr>
+                <tr>
+                  <td>Mar 12, 2025</td>
+                  <td>Field D</td>
+                  <td>3,125</td>
+                  <td>Flood Irrigation</td>
+                  <td><span class="status-indicator status-critical"></span> Poor</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fertilizer" class="app-section">
+      <h2 class="section-title">Fertilizer Application Monitor</h2>
+      <div class="grid-container">
+        <div class="sidebar">
+          <h3>Fertilizer Inventory</h3>
+          <div style="margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>Nitrogen (N)</span>
+              <span>64%</span>
+            </div>
+            <div style="height: 8px; background-color: #eee; border-radius: 4px;">
+              <div style="height: 100%; width: 64%; background-color: var(--primary); border-radius: 4px;"></div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>Phosphorus (P)</span>
+              <span>42%</span>
+            </div>
+            <div style="height: 8px; background-color: #eee; border-radius: 4px;">
+              <div style="height: 100%; width: 42%; background-color: var(--secondary); border-radius: 4px;"></div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span>Potassium (K)</span>
+              <span>14%</span>
+            </div>
+            <div style="height: 8px; background-color: #eee; border-radius: 4px;">
+              <div style="height: 100%; width: 14%; background-color: var(--danger); border-radius: 4px;"></div>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">Order Supplies</button>
+          
+          <div class="recommendations">
+            <h3>Soil Analysis</h3>
+            <div class="recommendation-item">
+              <h4>Field A Soil pH</h4>
+              <p>pH level is 6.2, which is within optimal range for current crops.</p>
+            </div>
+            <div class="recommendation-item">
+              <h4>Field B Nutrient Deficiency</h4>
+              <p>Potassium levels are low. Consider targeted application of K-rich fertilizer.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="main-content">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Fertilizer Application Schedule</h3>
+              <button class="btn btn-secondary">Create New Schedule</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mar 18, 2025</td>
+                  <td>Field A</td>
+                  <td>Nitrogen-Rich</td>
+                  <td>120 lbs</td>
+                  <td>Scheduled</td>
+                  <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Mar 20, 2025</td>
+                  <td>Field B</td>
+                  <td>Balanced NPK</td>
+                  <td>200 lbs</td>
+                  <td>Scheduled</td>
+                  <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Mar 15, 2025</td>
+                  <td>Field C</td>
+                  <td>Phosphorus-Rich</td>
+                  <td>95 lbs</td>
+                  <td>Scheduled</td>
+                  <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>Mar 14, 2025</td>
+                  <td>Field D</td>
+                  <td>Potassium Boost</td>
+                  <td>75 lbs</td>
+                  <td>Completed</td>
+                  <td><button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Fertilizer Efficiency Analysis</h3>
+            </div>
+            <div class="chart-container" id="fertilizerEfficiencyChart"></div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Nutrient Balance Tracker</h3>
+            </div>
+            <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+              <div style="text-align: center">
+                <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">N</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">65%</div>
+                <div>Nitrogen</div>
+              </div>
+              <div style="text-align: center">
+                <div style="font-size: 2rem; font-weight: bold; color: var(--secondary);">P</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">78%</div>
+                <div>Phosphorus</div>
+              </div>
+              <div style="text-align: center">
+                <div style="font-size: 2rem; font-weight: bold; color: var(--accent);">K</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">42%</div>
+                <div>Potassium</div>
+              </div>
+            </div>
+            <div class="chart-container" id="nutrientBalanceChart"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="allocation" class="app-section">
+      <h2 class="section-title">Smart Resource Allocation Tool</h2>
+      <div class="grid-container">
+        <div class="sidebar">
+          <h3>Resource Overview</h3>
+          <div class="stat">
+            <div class="stat-value">$12,845</div>
+            <div class="stat-label">Monthly Budget</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">$8,432</div>
+            <div class="stat-label">Spent This Month</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">$4,413</div>
+            <div class="stat-label">Remaining</div>
+          </div>
+          
+          <h3 style="margin-top: 20px;">Optimize For</h3>
+          <div class="form-group">
+            <select class="form-control">
+              <option>Maximum Yield</option>
+              <option>Cost Efficiency</option>
+              <option>Water Conservation</option>
+              <option>Balanced Approach</option>
+            </select>
+          </div>
+          
+          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">Generate Recommendations</button>
+        </div>
+        
+        <div class="main-content">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Resource Allocation Planner</h3>
+            </div>
+            <div class="chart-container" id="resourceAllocationChart"></div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">What-If Scenarios</h3>
+            </div>
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+              <div style="flex: 1;">
+                <h4>Scenario Parameters</h4>
+                <div class="form-group">
+                  <label class="form-label">Water Reduction</label>
+                  <input type="range" min="0" max="50" value="20" class="form-control">
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>0%</span>
+                    <span>20%</span>
+                    <span>50%</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Fertilizer Intensity</label>
+                  <input type="range" min="0" max="50" value="30" class="form-control">
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>0%</span>
+                    <span>30%</span>
+                    <span>50%</span>
+                  </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;">Run Simulation</button>
+              </div>
+              <div style="flex: 1;">
+                <h4>Projected Outcome</h4>
+                <div class="chart-container" id="scenarioChart"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">AI-Powered Recommendations</h3>
+            </div>
+            <div class="recommendation-item">
+              <h4>Irrigation Optimization</h4>
+              <p>Shift 30% of water resources from Field B to Field C to maximize yield potential based on current growth stages.</p>
+              <button class="btn btn-secondary" style="margin-top: 5px;">Apply Recommendation</button>
+            </div>
+            <div class="recommendation-item">
+              <h4>Fertilizer Reallocation</h4>
+              <p>Reduce nitrogen application in Field A by 15% and increase potassium in Field D by 20% to balance nutrient levels.</p>
+              <button class="btn btn-secondary" style="margin-top: 5px;">Apply Recommendation</button>
+            </div>
+            <div class="recommendation-item">
+              <h4>Weather-Based Adjustment</h4>
+              <p>Delay irrigation in all fields by 48 hours due to forecasted rainfall, saving approximately 4,500 gallons of water.</p>
+              <button class="btn btn-secondary" style="margin-top: 5px;">Apply Recommendation</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background-color: var(--primary-dark); color: white; padding: 20px 0; margin-top: 40px;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>AgriResource Pro</span>
+          </div>
+          <p style="margin-top: 10px;">Advanced agricultural resource management solution</p>
+        </div>
+        <div>
+          <p>© 2025 AgriResource Pro. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <script>
+    // Initialize all charts when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Water usage chart on dashboard
+      const waterCtx = document.getElementById('waterChart').getContext('2d');
+      const waterChart = new Chart(waterCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Water Usage (Gallons)',
+            data: [15200, 16400, 17200, 18900, 19200, 21000, 22400, 21800, 20500, 19200, 18000, 18432],
+            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+            borderColor: 'rgba(52, 152, 219, 1)',
+            borderWidth: 2,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+
+      // Fertilizer chart on dashboard
+      const fertilizerCtx = document.getElementById('fertilizerChart').getContext('2d');
+      const fertilizerChart = new Chart(fertilizerCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Fertilizer Usage (Pounds)',
+            data: [720, 680, 710, 790, 810, 850, 890, 870, 830, 800, 810, 842],
+            backgroundColor: 'rgba(46, 204, 113, 0.6)',
+            borderColor: 'rgba(46, 204, 113, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+
+      // Water usage trend chart
+      const waterTrendCtx = document.getElementById('waterUsageTrend').getContext('2d');
+      const waterTrendChart = new Chart(waterTrendCtx, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [
+            {
+              label: 'Field A',
+              data: [4200, 4300, 4100, 4400, 4250, 4150, 4300, 4250],
+              borderColor: 'rgba(52, 152, 219, 1)',
+              backgroundColor: 'rgba(52, 152, 219, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Field B',
+              data: [5800, 6100, 5900, 6200, 6000, 5700, 5850, 5900],
+              borderColor: 'rgba(155, 89, 182, 1)',
+              backgroundColor: 'rgba(155, 89, 182, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Field C',
+              data: [3600, 3500, 3800, 3700, 3750, 3900, 3800, 3600],
+              borderColor: 'rgba(46, 204, 113, 1)',
+              backgroundColor: 'rgba(46, 204, 113, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Gallons'
+              }
+            }
+          },
+          interaction: {
+            mode: 'index',
+            intersect: false
+          }
+        }
+      });
+
+      // Water allocation by field
+      const waterAllocationCtx = document.getElementById('waterAllocationChart').getContext('2d');
+      const waterAllocationChart = new Chart(waterAllocationCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Field A', 'Field B', 'Field C', 'Field D'],
+          datasets: [{
+            data: [25, 35, 20, 20],
+            backgroundColor: [
+              'rgba(52, 152, 219, 0.8)',
+              'rgba(155, 89, 182, 0.8)',
+              'rgba(46, 204, 113, 0.8)',
+              'rgba(243, 156, 18, 0.8)'
+            ],
+            borderColor: 'white',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right'
+            }
+          }
+        }
+      });
+
+      // Fertilizer efficiency chart
+      const fertilizerEfficiencyCtx = document.getElementById('fertilizerEfficiencyChart').getContext('2d');
+      const fertilizerEfficiencyChart = new Chart(fertilizerEfficiencyCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Nitrogen Efficiency', 'Phosphorus Efficiency', 'Potassium Efficiency', 'Application Method', 'Soil Absorption', 'Runoff Prevention'],
+          datasets: [
+            {
+              label: 'Current Performance',
+              data: [75, 82, 65, 78, 70, 85],
+              backgroundColor: 'rgba(52, 152, 219, 0.2)',
+              borderColor: 'rgba(52, 152, 219, 1)',
+              pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
+            },
+            {
+              label: 'Industry Benchmark',
+              data: [70, 75, 72, 73, 68, 80],
+              backgroundColor: 'rgba(192, 57, 43, 0.2)',
+              borderColor: 'rgba(192, 57, 43, 1)',
+              pointBackgroundColor: 'rgba(192, 57, 43, 1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(192, 57, 43, 1)'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 20
+              }
+            }
+          }
+        }
+      });
+
+      // Nutrient balance chart
+      const nutrientBalanceCtx = document.getElementById('nutrientBalanceChart').getContext('2d');
+      const nutrientBalanceChart = new Chart(nutrientBalanceCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Field A', 'Field B', 'Field C', 'Field D'],
+          datasets: [
+            {
+              label: 'Nitrogen',
+              data: [65, 70, 58, 72],
+              backgroundColor: 'rgba(46, 204, 113, 0.7)',
+              borderColor: 'rgba(46, 204, 113, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Phosphorus',
+              data: [78, 65, 82, 70],
+              backgroundColor: 'rgba(52, 152, 219, 0.7)',
+              borderColor: 'rgba(52, 152, 219, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Potassium',
+              data: [42, 50, 55, 45],
+              backgroundColor: 'rgba(243, 156, 18, 0.7)',
+              borderColor: 'rgba(243, 156, 18, 1)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: false
+            },
+            y: {
+              stacked: false,
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Nutrient Level (%)'
+              }
+            }
+          }
+        }
+      });
+
+      // Resource allocation chart
+      const resourceAllocationCtx = document.getElementById('resourceAllocationChart').getContext('2d');
+      const resourceAllocationChart = new Chart(resourceAllocationCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Water', 'Fertilizer', 'Labor', 'Equipment', 'Energy', 'Pest Control'],
+          datasets: [
+            {
+              label: 'Current Allocation',
+              data: [30, 25, 15, 10, 12, 8],
+              backgroundColor: 'rgba(52, 152, 219, 0.7)',
+              borderColor: 'rgba(52, 152, 219, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Recommended Allocation',
+              data: [25, 28, 17, 12, 10, 8],
+              backgroundColor: 'rgba(46, 204, 113, 0.7)',
+              borderColor: 'rgba(46, 204, 113, 1)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Percentage of Total Budget'
+              }
+            }
+          }
+        }
+      });
+
+      // Scenario chart
+      const scenarioCtx = document.getElementById('scenarioChart').getContext('2d');
+      const scenarioChart = new Chart(scenarioCtx, {
+        type: 'line',
+        data: {
+          labels: ['Current', 'Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [
+            {
+              label: 'Yield',
+              data: [100, 98, 97, 99, 102],
+              borderColor: 'rgba(46, 204, 113, 1)',
+              backgroundColor: 'rgba(46, 204, 113, 0.1)',
+              tension: 0.4,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Cost',
+              data: [100, 85, 82, 80, 78],
+              borderColor: 'rgba(231, 76, 60, 1)',
+              backgroundColor: 'rgba(231, 76, 60, 0.1)',
+              tension: 0.4,
+              fill: true,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              position: 'left',
+              title: {
+                display: true,
+                text: 'Yield (%)'
+              }
+            },
+            y1: {
+              beginAtZero: false,
+              position: 'right',
+              grid: {
+                drawOnChartArea: false
+              },
+              title: {
+                display: true,
+                text: 'Cost (%)'
+              }
+            }
+          }
+        }
+      });
+
+      // Event listeners for interactive elements
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Navigation highlighting
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          const sectionId = this.getAttribute('href');
+          document.querySelector(sectionId).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
