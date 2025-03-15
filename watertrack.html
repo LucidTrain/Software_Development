@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Usage Efficiency Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f0f8ff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            padding: 15px;
+            background: #f7f9fc;
+            border-radius: 8px;
+        }
+
+        .input-group h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f7f9fc;
+            border-radius: 8px;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+        }
+
+        .recommendations {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f6ff;
+            border-radius: 8px;
+        }
+
+        .recommendations h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            list-style-position: inside;
+            color: #34495e;
+        }
+
+        .savings-summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d4edda;
+            border-radius: 8px;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Water Usage Efficiency Calculator</h1>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <h3>Basic Information</h3>
+                <select id="userType">
+                    <option value="household">Household</option>
+                    <option value="business">Business</option>
+                    <option value="farm">Farm</option>
+                </select>
+                <input type="number" id="occupants" placeholder="Number of occupants/employees">
+                <input type="number" id="area" placeholder="Area in square feet">
+            </div>
+
+            <div class="input-group">
+                <h3>Water Usage Data</h3>
+                <input type="number" id="monthlyWater" placeholder="Monthly water usage (gallons)">
+                <input type="number" id="waterBill" placeholder="Monthly water bill ($)">
+            </div>
+
+            <div class="input-group">
+                <h3>Usage Breakdown</h3>
+                <input type="number" id="bathroom" placeholder="Bathroom usage (%)">
+                <input type="number" id="kitchen" placeholder="Kitchen usage (%)">
+                <input type="number" id="outdoor" placeholder="Outdoor usage (%)">
+            </div>
+        </div>
+
+        <button onclick="calculateEfficiency()">Calculate Efficiency</button>
+
+        <div class="results" id="results">
+            <!-- Results will be inserted here -->
+        </div>
+
+        <div class="chart-container" id="usageChart">
+            <!-- Chart will be inserted here -->
+        </div>
+
+        <div class="recommendations" id="recommendations">
+            <!-- Recommendations will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function calculateEfficiency() {
+            // Get input values
+            const userType = document.getElementById('userType').value;
+            const occupants = Number(document.getElementById('occupants').value);
+            const area = Number(document.getElementById('area').value);
+            const monthlyWater = Number(document.getElementById('monthlyWater').value);
+            const waterBill = Number(document.getElementById('waterBill').value);
+            const bathroom = Number(document.getElementById('bathroom').value);
+            const kitchen = Number(document.getElementById('kitchen').value);
+            const outdoor = Number(document.getElementById('outdoor').value);
+
+            // Calculate efficiency metrics
+            const gallonsPerPerson = monthlyWater / occupants;
+            const gallonsPerSqFt = monthlyWater / area;
+            const costPerGallon = waterBill / monthlyWater;
+
+            // Define benchmarks based on user type
+            let efficiency = 'Average';
+            let recommendations = [];
+            let potentialSavings = 0;
+
+            if (userType === 'household') {
+                if (gallonsPerPerson > 3000) {
+                    efficiency = 'Poor';
+                    recommendations.push('Install low-flow showerheads and faucet aerators');
+                    recommendations.push('Fix any leaking pipes or faucets');
+                    recommendations.push('Consider replacing old toilets with dual-flush models');
+                    potentialSavings = monthlyWater * 0.3;
+                } else if (gallonsPerPerson < 2000) {
+                    efficiency = 'Excellent';
+                    recommendations.push('Consider rainwater harvesting for additional savings');
+                    recommendations.push('Maintain current efficient practices');
+                    potentialSavings = monthlyWater * 0.1;
+                }
+            }
+
+            // Generate results HTML
+            const resultsHTML = `
+                <h3>Efficiency Analysis</h3>
+                <p>Current Efficiency Rating: ${efficiency}</p>
+                <p>Water Usage per Person: ${gallonsPerPerson.toFixed(2)} gallons/month</p>
+                <p>Water Usage per Square Foot: ${gallonsPerSqFt.toFixed(2)} gallons/month</p>
+                <p>Cost per Gallon: $${costPerGallon.toFixed(3)}</p>
+            `;
+
+            // Generate recommendations HTML
+            const recommendationsHTML = `
+                <h3>Recommendations</h3>
+                <ul>
+                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+                <div class="savings-summary">
+                    <h3>Potential Savings</h3>
+                    <p>You could save up to ${potentialSavings.toFixed(0)} gallons per month</p>
+                    <p>Estimated monthly savings: $${(potentialSavings * costPerGallon).toFixed(2)}</p>
+                </div>
+            `;
+
+            // Update the DOM
+            document.getElementById('results').innerHTML = resultsHTML;
+            document.getElementById('recommendations').innerHTML = recommendationsHTML;
+
+            // Create simple bar chart using div elements
+            const chartData = [
+                { label: 'Bathroom', value: bathroom },
+                { label: 'Kitchen', value: kitchen },
+                { label: 'Outdoor', value: outdoor }
+            ];
+
+            const chartHTML = `
+                <h3>Usage Breakdown</h3>
+                <div style="display: flex; height: 200px; align-items: flex-end; gap: 20px; margin-top: 20px;">
+                    ${chartData.map(item => `
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                            <div style="width: 50px; background: #3498db; height: ${item.value}%; transition: height 0.5s;"></div>
+                            <p style="margin-top: 10px;">${item.label}</p>
+                            <p>${item.value}%</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('usageChart').innerHTML = chartHTML;
+        }
+
+        // Initialize with sample data
+        window.onload = function() {
+            document.getElementById('occupants').value = '4';
+            document.getElementById('area').value = '2000';
+            document.getElementById('monthlyWater').value = '8000';
+            document.getElementById('waterBill').value = '100';
+            document.getElementById('bathroom').value = '40';
+            document.getElementById('kitchen').value = '30';
+            document.getElementById('outdoor').value = '30';
+        };
+    </script>
+</body>
+</html>
